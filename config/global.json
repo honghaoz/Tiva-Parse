@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "Tiva - TV Scheduler": {
+            "applicationId": "UjD956TYrxLbL58UwNqiSSaHcUBiSp4gs3S0oV5Q", 
+            "masterKey": "DPX0GSGkbRVoPmHemhccfZ2oQeX4jeA04ltaslIh"
+        }, 
+        "_default": {
+            "link": "Tiva - TV Scheduler"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.18"
+    }
+}
