@@ -32,8 +32,10 @@ Parse.Cloud.define("forwardAPI", function(request, response) {
   //response.success("Hello world!");
 });
 
+
+var myModule = require('cloud/api_experiment.js');
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // For example:
-Parse.Cloud.define("hello", function(request, response) {
-  response.success("Hello world!");
+Parse.Cloud.define("testHTTP", function(request, response) {
+  myModule.queryMonth("2014Jun", request, response);
 });
