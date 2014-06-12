@@ -1,4 +1,6 @@
-
+// Include modeules
+var myModule = require('cloud/api_experiment.js');
+var testModule = require('cloud/test.js');
 var ratingsModule = require('cloud/Ratings.js');
 
 // Check whether an object is a number
@@ -36,7 +38,6 @@ Parse.Cloud.define("forwardAPI", function(request, response) {
 });
 
 
-var myModule = require('cloud/api_experiment.js');
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // For example:
 Parse.Cloud.define("testHTTP", function(request, response) {
