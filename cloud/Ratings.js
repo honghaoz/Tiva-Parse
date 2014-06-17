@@ -1,30 +1,22 @@
 var Ratings = Parse.Object.extend("Ratings", {
   // Instance methods
   initialize: function (attrs, options) {
-    console.log("initialize called");
-    this.percentage = 0;
-    this.votes = 0;
-    this.loved = 0;
-    this.hated = 0;
   }
 }, {
   // Class methods
-  init: function(percentage, votes, loved, hated) {
+  create: function(showId, percentage, votes, loved, hated) {
     var rating = new Ratings();
-    rating.percentage = percentage;
-    rating.votes = votes;
-    rating.loved = loved;
-    rating.hated = hated;
-    rating.set("Percentage", rating.percentage);
-    rating.set("Votes", rating.votes);
-    rating.set("Loved", rating.loved);
-    rating.set("Hated", rating.hated);
+    rating.set("ShowId", showId);
+    rating.set("Percentage", percentage);
+    rating.set("Votes", votes);
+    rating.set("Loved", loved);
+    rating.set("Hated", hated);
     return rating;
   }
 });
 
 Parse.Cloud.define("testRating", function(request, response) {
-  var aRating = new Ratings.init(95, 8, 8, 0);
+  var aRating = Ratings.create("CyMCK6HVhG", 95, 8, 8, 0);
   aRating.save(null, {
     success: function(aRating) {
       // Execute any logic that should take place after the object is saved.
