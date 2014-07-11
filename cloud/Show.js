@@ -97,10 +97,36 @@ function processJsonData(jsonData) {
 	return promise;
 }
 
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 function runUpdate(request, status){
+	var date = request.params.date;
+	var daysForData = request.params.daysForData;
+	console.log(date + " " + daysForData);
+
+	if (!isNumber(date)) {
+		var targetDate = new Date();
+		targetDate.setDate(targetDate.getDate() + 3);
+		var day = targetDate.getDate();
+		var month = targetDate.getMonth() + 1;
+		var year = targetDate.getFullYear();
+		if (month < 10) {
+			month = "0" + month;
+		}
+		date = year + "" + month + "" + day;
+	}
+
+	if (!isNumber(daysForData)) {
+		daysForData = 1;
+	}
+
+	console.log(date + " " + daysForData);
+
 	Parse.Cloud.httpRequest({
 		method: "GET",
-		url: "http://api.trakt.tv/calendar/shows.json/1113cff76935521fb75e4bd9336e9a4c/tomorrow/1",
+		url: "http://api.trakt.tv/calendar/shows.json/1113cff76935521fb75e4bd9336e9a4c/" + date + "/" + daysForData,
 		success: function (httpResponse) {
 
 			console.log("Request from API successful" + httpResponse.status);
@@ -116,11 +142,10 @@ function runUpdate(request, status){
 	});
 }
 
-Parse.Cloud.job("updateTomorrowData", function (request, status) {
+Parse.Cloud.job("updateAPIData", function (request, status) {
 	runUpdate(request,status);
 });
 
-Parse.Cloud.define("updateTomorrowData", function (request, status) {
+Parse.Cloud.define("updateAPIData", function (request, status) {
 	runUpdate(request,status);
 });
-

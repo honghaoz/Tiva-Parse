@@ -1,10 +1,5 @@
 var User = Parse.User;
-var Recom = Parse.Object.extend("Recommendation");
 var Show = Parse.Object.extend("Show");
-
-Parse.Cloud.define("resetPW", function (request, status) {
-	Parse.User.requestPasswordReset("a77chan@uwaterloo.ca", status);
-});
 
 function addFavImpl(userID, showID) {
 	var promise = new Parse.Promise();
