@@ -2,5 +2,5 @@ curl -X POST \
   -H "X-Parse-Application-Id: UjD956TYrxLbL58UwNqiSSaHcUBiSp4gs3S0oV5Q" \
   -H "X-Parse-REST-API-Key: 3UnTlreVmT5HBYYX0zKn6sbm9Mlly5F9OGMarrhi" \
   -H "Content-Type: application/json" \
-  -d '{"recommenderID" : "60cYJ8SAgI", "recommendeeID" : "264109563776510", "showID" : "xIPQTlstw5"}' \
+  -d '{"recommenderID" : "Zd2buR4Uis", "recommendeeID" : "791073720933330", "showID" : "xIPQTlstw5"}' \
   https://api.parse.com/1/functions/recommendShow
