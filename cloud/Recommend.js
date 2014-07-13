@@ -12,9 +12,13 @@ function recommendShowImpl(recommenderID, recommendeeID, showID) {
 	rder.set("objectId", recommenderID);
 	promises.push(rder.fetch());
 
-	var rdee = new User();
-	rdee.set("objectId", recommendeeID);
-	promises.push(rdee.fetch());
+	var rdee;
+
+	var query = new Parse.Query(User);
+	query.equalTo("fbID", recommendeeID);
+	promises.push(query.first().then(function(user){
+		rdee = user;
+	});
 
 	var showObj = new Show();
 	showObj.set("objectId", showID);

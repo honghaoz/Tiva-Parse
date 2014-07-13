@@ -43,6 +43,7 @@ Parse.Cloud.define("commentShow", function (request, status) {
 
 	if (contents.length <= 0 || contents.length > 200) {
 		status.error("Contents must be at least 0 to 200 characters long");
+		return;
 	}
 
 	commentShowImpl(senderID, contents, showID).then(function(okay){
