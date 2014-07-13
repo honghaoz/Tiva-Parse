@@ -38,6 +38,13 @@ function recommendShowImpl(recommenderID, recommendeeID, showID) {
 		var relation = rder.relation("Recommending");
 		relation.add(results);
 		return rder.save();
+	}).then(function(results){
+		var fbID = rdee.get("fbID");
+		var msg = rder.get("fbFirstName") + " " + rder.get("fbLastName") + " " + "recommends you " + showObj.get("Title");
+		return Parse.Push.send({
+			channels : ["fbID" + fbID],
+			data : {alert : msg},
+		});
 	});
 }
 
@@ -59,6 +66,10 @@ Parse.Cloud.define("recommendShow", function (request, status) {
 	recommendShowImpl(recommenderID, recommendeeID, showID).then(function(okay){
 			status.success("OKAY");
 		}, function(error){
-			status.error("FAILURE");
+			var ret = ("FAILURE\nErrors:\n");
+			for (var key in error){
+				ret += key + " " + error[key] + "\n";
+			}
+			status.error(ret);
 		});
 });
