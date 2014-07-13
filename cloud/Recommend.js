@@ -3,7 +3,6 @@ var Recom = Parse.Object.extend("Recommendation");
 var Show = Parse.Object.extend("Show");
 
 function recommendShowImpl(recommenderID, recommendeeID, showID) {
-	var promise = new Parse.Promise();
 	var promises = [];
 
 	Parse.Cloud.useMasterKey();
@@ -18,13 +17,16 @@ function recommendShowImpl(recommenderID, recommendeeID, showID) {
 	query.equalTo("fbID", recommendeeID);
 	promises.push(query.first().then(function(user){
 		rdee = user;
-	});
+	}));
 
 	var showObj = new Show();
 	showObj.set("objectId", showID);
 	promises.push(showObj.fetch());
 
-	Parse.Promise.when(promises).then(function(obj) {
+	return Parse.Promise.when(promises).then(function(obj) {
+		if (rder == null || rdee == null || showObj == null){
+			throw "Parameters cannot be retrieved";
+		}
 
 		var recom = new Recom();
 		recom.set("recommender", rder);
@@ -36,11 +38,7 @@ function recommendShowImpl(recommenderID, recommendeeID, showID) {
 		var relation = rder.relation("Recommending");
 		relation.add(results);
 		return rder.save();
-	}).then(function(results){
-		promise.resolve();
 	});
-
-	return promise;
 }
 
 Parse.Cloud.define("recommendShow", function (request, status) {
