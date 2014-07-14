@@ -40,10 +40,12 @@ function recommendShowImpl(recommenderID, recommendeeID, showID) {
 		return rder.save();
 	}).then(function(results){
 		var fbID = rdee.get("fbID");
-		var msg = rder.get("fbFirstName") + " " + rder.get("fbLastName") + " " + "recommends you " + showObj.get("Title") + "\nType: Recommendation\nShow ID: " + showID + "Recommender ID: " + recommenderID + "\nRecommendee ID: " + recommendeeID;
+		var recommenderName = rder.get("fbFirstName") + " " + rder.get("fbLastName");
+		var msg = recommenderName + " " + "recommends you " + showObj.get("Title");
+		var type = "Recommendation";
 		return Parse.Push.send({
 			channels : ["fbID" + fbID],
-			data : {alert : msg},
+			data : {alert : msg, type : type, recommenderName: recommenderName, recommenderID: recommenderID, recommendeeID: recommendeeID},
 		});
 	});
 }
