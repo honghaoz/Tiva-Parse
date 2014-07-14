@@ -40,7 +40,7 @@ function recommendShowImpl(recommenderID, recommendeeID, showID) {
 		return rder.save();
 	}).then(function(results){
 		var fbID = rdee.get("fbID");
-		var msg = rder.get("fbFirstName") + " " + rder.get("fbLastName") + " " + "recommends you " + showObj.get("Title");
+		var msg = rder.get("fbFirstName") + " " + rder.get("fbLastName") + " " + "recommends you " + showObj.get("Title") + "\nType: Recommendation\nShow ID: " + showID + "Recommender ID: " + recommenderID + "\nRecommendee ID: " + recommendeeID;
 		return Parse.Push.send({
 			channels : ["fbID" + fbID],
 			data : {alert : msg},

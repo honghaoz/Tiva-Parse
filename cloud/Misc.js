@@ -27,39 +27,6 @@ function addFavImpl(userID, showID) {
 	return promise;
 }
 
-function addFriend(userID, friendID) {
-	var promise = new Parse.Promise();
-	var promises = [];
-
-	Parse.Cloud.useMasterKey();
-
-	var ruser = new User();
-	ruser.set("objectId", userID);
-	promises.push(ruser.fetch());
-
-	var rfriend = new User();
-	rfriend.set("objectId", friendID);
-	promises.push(rfriend.fetch());
-
-	Parse.Promise.when(promises).then(function(obj) {
-		var friendPromises = [];
-
-		var relation = ruser.relation("Friends");
-		relation.add(rfriend);
-		friendPromises.push(ruser.save());
-
-		relation = rfriend.relation("Friends");
-		relation.add(ruser);
-		friendPromises.push(rfriend.save());
-
-		return Parse.Promise.when(friendPromises);
-	}).then(function(obj){
-		promise.resolve();
-	});
-
-	return promise;
-}
-
 Parse.Cloud.define("addFavourite", function (request, status) {
 	var userID = request.params.userID;
 	var showID = request.params.showID;
@@ -70,12 +37,39 @@ Parse.Cloud.define("addFavourite", function (request, status) {
 		});
 });
 
-Parse.Cloud.define("addFriend", function (request, status) {
+function removeFavImpl(userID, showID) {
+
+	var promises = [];
+
+	Parse.Cloud.useMasterKey();
+	var userObj = new User();
+	userObj.set("objectId", userID);
+
+	var showObj = new Show();
+	showObj.set("objectId", showID);
+
+	promises.push(showObj.fetch());
+	promises.push(userObj.fetch());
+
+	return Parse.Promise.when(promises).then(function (results){
+		return showObj.save();
+	}).then(function(results){
+		var favShows = userObj.relation("FavouriteShows");
+		favShows.remove(showObj);
+		return userObj.save();
+	});
+}
+
+Parse.Cloud.define("removeFavourite", function (request, status) {
 	var userID = request.params.userID;
-	var friendID = request.params.friendID;
-	addFriend(userID, friendID).then(function(okay){
+	var showID = request.params.showID;
+	removeFavImpl(userID, showID).then(function(okay){
 			status.success("OKAY");
 		}, function(error){
-			status.error("FAILURE");
+			var ret = ("FAILURE\nErrors:\n");
+			for (var key in error){
+				ret += key + " " + error[key] + "\n";
+			}
+			status.error(ret);
 		});
 });
