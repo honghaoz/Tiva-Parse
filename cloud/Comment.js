@@ -16,19 +16,16 @@ function commentShowImpl(senderID, contents, showID) {
 	showObj.set("objectId", showID);
 	promises.push(showObj.fetch());
 
-	Parse.Promise.when(promises).then(function(obj) {
+	return Parse.Promise.when(promises).then(function(obj) {
 
 		var comment = new Comment();
 		comment.set("sender", sender);
 		comment.set("contents", contents);
 		comment.set("tvdb_id", showObj.get("tvdb_id"));
+		comment.set("showID_ref", showObj);
 
 		return comment.save();
-	}).then(function(results){
-		promise.resolve();
 	});
-
-	return promise;
 }
 
 Parse.Cloud.define("commentShow", function (request, status) {
@@ -49,7 +46,11 @@ Parse.Cloud.define("commentShow", function (request, status) {
 	commentShowImpl(senderID, contents, showID).then(function(okay){
 			status.success("OKAY");
 		}, function(error){
-			status.error("FAILURE");
+			var ret = ("FAILURE\nErrors:\n");
+			for (var key in error){
+				ret += key + " " + error[key] + "\n";
+			}
+			status.error(ret);
 		});
 });
 
@@ -79,7 +80,11 @@ Parse.Cloud.define("getShowComments", function (request, status) {
 	getShowImpl(tvdb_id, ret).then(function(okay){
 			status.success(ret[0]);
 		}, function(error){
-			status.error("");
+			var ret = ("FAILURE\nErrors:\n");
+			for (var key in error){
+				ret += key + " " + error[key] + "\n";
+			}
+			status.error(ret);
 		});
 });
 
